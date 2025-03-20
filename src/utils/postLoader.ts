@@ -29,7 +29,7 @@ export const loadPosts = async (): Promise<Post[]> => {
         const content = await fileResponse.text();
 
         const { attributes, body } = fm(content);
-        const slug = fileName.replace('.md', '');
+        const slug = fileName.split('/').pop()?.replace('.md', '') || '';
 
         return {
           slug,
