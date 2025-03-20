@@ -8,7 +8,7 @@ interface BlogPostProps {
   date: string;
   content: string;
 }
-const API_URL = "https://reactions.jamesliu-jiaming.workers.dev/";
+const API_URL = "https://reaction-worker.jamesliu-jiaming.workers.dev/";
 
 // Hash function: Convert date string to a hue value (0–360)
 function hashDateToHue(date: string): number {
