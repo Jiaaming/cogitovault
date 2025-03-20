@@ -6,6 +6,7 @@ export default defineConfig({
   plugins: [
     tailwindcss(),
   ],
+  base: '/cogitovault/', // Optional, for Github Pages.
   define: {
     global: 'window', // Optional, aligns with some libraries
     'process.env': {}, // Optional, for other potential polyfills
