@@ -6,15 +6,16 @@ export default defineConfig({
   plugins: [
     tailwindcss(),
   ],
-  base: '/cogitovault/', // Optional, for Github Pages.
+  base: '/cogitovault/', 
+  assetsInclude: ['**/*.md'], 
   define: {
     global: 'window', // Optional, aligns with some libraries
     'process.env': {}, // Optional, for other potential polyfills
     Buffer: ['buffer', 'Buffer'], // Polyfill Buffer
   },
   server: {
-    host: '0.0.0.0', // 允许局域网访问
-    port: 5173,      // 你可以改成别的端口
+    host: '0.0.0.0', 
+    port: 5173,      
   },
   optimizeDeps: {
     esbuildOptions: {
