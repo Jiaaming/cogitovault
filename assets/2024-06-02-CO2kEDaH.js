@@ -1,0 +1,9 @@
+const n=`---
+date: "2024-06-02"
+---
+昨天见到了可能是这辈子遇见的最酷的中年人🥹史诗级收藏家，非常具有文学色彩的人。民国时期的金刚经、1888年的bible、3000+唱片（爵士与摇滚乐骨灰级爱好者，对每个专辑歌手背后的故事都了如指掌）、各类胶片机、以及各种数不胜数的人有趣玩意，大受震撼🥹
+<img src="https://raw.githubusercontent.com/Jiaaming/blogImage/main/pic/20240602T_5040777182581302_1.jpg" width="400" />
+
+要是我四五十岁的时候也这么有趣就好了
+<img src="https://raw.githubusercontent.com/Jiaaming/blogImage/main/pic/20240602T_5040777182581302_3.jpg" width="400" />
+`;export{n as default};
