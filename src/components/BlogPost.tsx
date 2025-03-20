@@ -99,13 +99,13 @@ const BlogPost = ({ title, date, content }: BlogPostProps) => {
         {/* 日期和标题部分 */}
         <div className="mb-2">
           <p 
-            className="text-sm text-gray-400 uppercase"
+            className="text-m text-gray-400 uppercase"
             style={{ letterSpacing: '0.08em', color: generateBackgroundColor(date)  }}
           >
             {date}
           </p>
           <h2 
-            className="text-2xl font-semibold text-black mt-1 mb-4"
+            className="text-xl font-semibold text-black mt-1 mb-4"
             style={{
               fontFamily: 'ui-sans-serif, PingFang TC, Microsoft YaHei, Helvetica, Arial',
             }}
