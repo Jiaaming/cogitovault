@@ -1,0 +1,4 @@
+@import "tailwindcss";
+.small-img {
+  width: 300px;
+}
