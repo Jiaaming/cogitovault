@@ -33,7 +33,7 @@ export const loadPosts = async (): Promise<Post[]> => {
 
         return {
           slug,
-          title: (attributes as PostAttributes).title || null,
+          title: (attributes as PostAttributes).title || '',
           date: (attributes as PostAttributes).date || slug.slice(0, 10),
           content: body,
         };
@@ -49,7 +49,6 @@ export const loadPosts = async (): Promise<Post[]> => {
     });
 
     const posts = await Promise.all(postsPromises);
-    console.log('Loaded posts:', posts);
 
     return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   } catch (error) {

@@ -28,16 +28,16 @@ function App() {
             </div>
 
             <div className="space-x-4 text-gray-600 font-medium flex items-center">
-              <Link to="/page/1" className="hover:text-blue-500 transition-colors">
-                <MdArchive size={24} />
-              </Link>
+              
               <a
                 href="https://jamesliu.space/"
                 className="hover:text-blue-500 transition-colors"
               >
                 <FaHome size={24} />
               </a>
-              
+              <Link to="/page/1" className="hover:text-blue-500 transition-colors">
+                <MdArchive size={24} />
+              </Link>
             </div>
           </div>
         </nav>

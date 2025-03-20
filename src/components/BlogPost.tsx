@@ -1,13 +1,14 @@
-//src/components/BlogPost.tsx
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
+import { useState, useEffect } from "react";
 
 interface BlogPostProps {
   title: string;
   date: string;
   content: string;
 }
+const API_URL = "https://reactions.jamesliu-jiaming.workers.dev/";
 
 // Hash function: Convert date string to a hue value (0–360)
 function hashDateToHue(date: string): number {
@@ -16,8 +17,10 @@ function hashDateToHue(date: string): number {
       hash = date.charCodeAt(i) + ((hash << 5) - hash); // Simple hash algorithm
     }
     return Math.abs(hash) % 360; // Ensure value is between 0 and 360
-  }// HSL to RGB conversion function
-  function hslToRgb(h: number, s: number, l: number): string {
+}
+
+// HSL to RGB conversion function
+function hslToRgb(h: number, s: number, l: number): string {
     s /= 100; // Convert percentage to 0–1 range
     l /= 100;
     const k = (n: number) => (n + h / 30) % 12;
@@ -27,18 +30,48 @@ function hashDateToHue(date: string): number {
     const g = Math.round(255 * f(8));
     const b = Math.round(255 * f(4));
     return `rgb(${r}, ${g}, ${b})`;
-  }// Generate background color based on date
-  function generateBackgroundColor(date: string): string {
-    const hue = hashDateToHue(date); // Hue varies by date
-    const saturation = 20 + Math.random() * 20; // 20%–40%, low saturation
-    const lightness = 40 + Math.random() * 10; // 40%–50%, light color
-    return hslToRgb(hue, saturation, lightness);
-  }
-  
-  
+}
 
+// Generate background color based on date
+function generateBackgroundColor(date: string): string {
+    const hue = hashDateToHue(date); // Hue varies by date
+    const saturation = 40 + Math.random() * 20; 
+    const lightness = 40 + Math.random() * 10; 
+    return hslToRgb(hue, saturation, lightness);
+}
 
 const BlogPost = ({ title, date, content }: BlogPostProps) => {
+  const [likes, setLikes] = useState(0);
+
+  // 获取点赞数
+  useEffect(() => {
+    async function fetchLikes() {
+      try {
+        const res = await fetch(`${API_URL}?id=${date}`);
+        const likeCount = await res.text();
+        setLikes(parseInt(likeCount, 10) || 0);
+      } catch (error) {
+        console.error("获取点赞数失败:", error);
+      }
+    }
+    fetchLikes();
+  }, [date]);
+
+  // 点赞函数
+  async function likePost() {
+    try {
+      await fetch(`${API_URL}?id=${date}`, { method: "POST" });
+      setLikes((prev) => prev + 1); // 立即更新 UI
+    } catch (error) {
+      console.error("点赞失败:", error);
+    }
+  }
+
+  // 处理点赞点击并阻止事件冒泡
+  const handleLikeClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // 阻止事件冒泡
+    likePost();
+  };
 
   return (
     <div 
@@ -54,7 +87,6 @@ const BlogPost = ({ title, date, content }: BlogPostProps) => {
       "
       style={{
         border: '1px solid #eaeaea', /* 极浅的分割线 */
-        
       }}
     >
       {/* 可以用一个「彩色竖条」来增加一点点活泼度 */}
@@ -120,10 +152,24 @@ const BlogPost = ({ title, date, content }: BlogPostProps) => {
             {content}
           </ReactMarkdown>
         </div>
+
+        {/* 点赞按钮 */}
+        <div className="flex items-center mt-6">
+          <button
+            className="
+              flex items-center space-x-2 px-4 py-2 text-sm font-semibold 
+              text-gray-600 bg-gray-100 hover:bg-gray-200 transition rounded-md
+            "
+            onClick={(e) => e.preventDefault()} // 阻止默认行为（如果有跳转）
+          >
+            <span onClick={handleLikeClick}>
+              😶 <span>{likes}</span>
+            </span>
+          </button>
+        </div>
       </div>
     </div>
   );
 };
 
 export default BlogPost;
-
