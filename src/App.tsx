@@ -3,6 +3,8 @@ import Typical from 'react-typical';
 import { HashRouter, Routes, Route, Navigate, Link } from 'react-router-dom';
 import BlogPage from './pages/BlogPage';
 import SinglePostPage from './pages/SinglePostPage';
+import { FaHome } from "react-icons/fa"; // Home icon
+import { MdArchive } from "react-icons/md"; // Archive icon
 
 function App() {
   return (
@@ -18,27 +20,24 @@ function App() {
                 steps={["JIAMING's", 500, "JIAMING's CogitoVault", 1000]}
                 loop={Infinity}
                 wrapper="span"
-                className="text-2xl font-bold ml-4 tracking-tight text-gray-800"
+                className="text-2xl font-bold ml-1 tracking-tight text-gray-800"
                 style={{
                   fontFamily: "ui-sans-serif, PingFang TC, Microsoft YaHei, Helvetica, Arial"
                 }}
               />
             </div>
 
-            <div className="space-x-4 text-gray-600 font-medium">
+            <div className="space-x-4 text-gray-600 font-medium flex items-center">
+              <Link to="/page/1" className="hover:text-blue-500 transition-colors">
+                <MdArchive size={24} />
+              </Link>
               <a
                 href="https://jamesliu.space/"
                 className="hover:text-blue-500 transition-colors"
               >
-                Home
+                <FaHome size={24} />
               </a>
-              <Link
-                to="/page/1"
-                className="hover:text-blue-500 transition-colors"
-              >
-                Archive
-              </Link>
-              {/* 其他导航链接 */}
+              
             </div>
           </div>
         </nav>
