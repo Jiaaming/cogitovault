@@ -1,5 +1,4 @@
-// src/utils/postLoader.ts
-import matter from 'gray-matter';
+import fm from 'front-matter';
 
 export interface Post {
   slug: string;
@@ -8,36 +7,53 @@ export interface Post {
   content: string;
 }
 
+interface PostAttributes {
+  title?: string;
+  date?: string;
+}
+
 export const loadPosts = async (): Promise<Post[]> => {
-const postModules = import.meta.glob('../posts/**/*.md', { as: 'raw', eager: false });
-  console.log('Found files:', Object.keys(postModules));
-
-  const postPromises = Object.keys(postModules).map(async (path) => {
-    try {
-
-      const module = await postModules[path](); // Attempt to load the file
-      const { data, content } = matter(module); // Parse with gray-matter
-
-      const slug = path.split('/').pop()?.replace('.md', '') || '';
-      return {
-        slug,
-        title: data.title || '',
-        date: data.date || slug.slice(0, 10),
-        content,
-      };
-    } catch (error) {
-      console.error(`Error processing file ${path}:`, error);
-      // Return a default post to avoid breaking the Promise.all
-      return {
-        slug: path.split('/').pop()?.replace('.md', '') || '',
-        title: 'Error Loading Post',
-        date: 'Unknown Date',
-        content: 'Failed to load this post.',
-      };
+  try {
+    const response = await fetch('/posts/index.json');
+    if (!response.ok) {
+      throw new Error(`Failed to fetch post list: ${response.statusText}`);
     }
-  });
+    const fileList: string[] = await response.json();
 
-  const loadedPosts = await Promise.all(postPromises);
-  console.log('All loaded posts:', loadedPosts); // Check the final array
-  return loadedPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    const postsPromises = fileList.map(async (fileName) => {
+      try {
+        const fileResponse = await fetch(`/posts/${fileName}`);
+        if (!fileResponse.ok) {
+          throw new Error(`Failed to fetch file ${fileName}: ${fileResponse.statusText}`);
+        }
+        const content = await fileResponse.text();
+
+        const { attributes, body } = fm(content);
+        const slug = fileName.replace('.md', '');
+
+        return {
+          slug,
+          title: (attributes as PostAttributes).title || null,
+          date: (attributes as PostAttributes).date || slug.slice(0, 10),
+          content: body,
+        };
+      } catch (error) {
+        console.error(`Error processing file ${fileName}:`, error);
+        return {
+          slug: fileName.replace('.md', ''),
+          title: 'Error Loading Post',
+          date: 'Unknown Date',
+          content: 'Failed to load this post.',
+        };
+      }
+    });
+
+    const posts = await Promise.all(postsPromises);
+    console.log('Loaded posts:', posts);
+
+    return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  } catch (error) {
+    console.error('Error loading posts:', error);
+    return [];
+  }
 };
