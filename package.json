@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "generate-posts": "node scripts/generatePostIndex.js",
-    "dev": "npm run generate-posts && vite",
-    "build": "npm run generate-posts && vite build",
+    "dev": "vite",
+    "build": "ite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "deploy": "gh-pages -d dist"
